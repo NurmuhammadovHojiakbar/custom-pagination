@@ -4,17 +4,17 @@ export default function usePagination({
   currentIndex,
   totalItems,
   itemsPerPage,
-  siblingCount = 2,
+  siblingCount = 1,
 }) {
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
-  const isLeftDots = currentIndex - siblingCount * 2 >= 1;
-  const isRightDots = totalPages - currentIndex >= siblingCount * 2;
+  const isLeftDots = currentIndex - siblingCount > 2;
+  const isRightDots = totalPages - currentIndex > 2 + siblingCount;
 
   const range = [];
 
   if (!isLeftDots && isRightDots) {
-    for (let i = 1; i <= siblingCount * 2; i++) {
+    for (let i = 1; i <= siblingCount * 2 + 3; i++) {
       range.push(i);
     }
     range.push(DOTS, totalPages);
@@ -22,7 +22,7 @@ export default function usePagination({
   }
   if (isLeftDots && !isRightDots) {
     range.push(1, DOTS);
-    for (let i = siblingCount * 2 - 1; i >= 0; i--) {
+    for (let i = siblingCount * 2 + 2; i >= 0; i--) {
       range.push(totalPages - i);
     }
     return range;
@@ -31,7 +31,7 @@ export default function usePagination({
     range.push(1, DOTS);
     for (
       let i = currentIndex - siblingCount;
-      i < currentIndex + siblingCount;
+      i <= currentIndex + siblingCount;
       i++
     ) {
       range.push(i);
